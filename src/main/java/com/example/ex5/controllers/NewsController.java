@@ -52,21 +52,14 @@ public class NewsController {
      */
     @PostMapping("/addnews")
     public String addNews(@Valid News news, BindingResult result, Model model) {
-
-        // validate the object and get the errors
         if (result.hasErrors()) {
-            // errors MUST be displayed in the view and not just printed to the console
-            System.out.println("validation errors: " + result.getAllErrors());
             return "add-news";
         }
 
-
-
         repository.save(news);
 
-        // pass the list of newsp to the view
-        model.addAttribute("newsp", repository.findAll());
-        return "index";
+        // הפניה מחדש למניעת שליחת טופס כפולה
+        return "redirect:/news";
     }
 
     /** we implemented a POST request for adding a news, as a result
