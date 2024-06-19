@@ -11,6 +11,9 @@
 <body>
 <div class="container my-5">
   <h2 class="mb-5">Add News</h2>
+  <form action="/logout" method="post" style="display:inline;">
+    <button class="btn btn-outline-success" type="submit">Logout</button>
+  </form>
   <div class="row">
     <div class="col-md-6">
       <form  th:action="@{/addnews}" th:object="${news}" method="post">

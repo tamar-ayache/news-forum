@@ -12,20 +12,25 @@
             padding-top: 3.5rem;
             background-color: #f8f9fa;
         }
+
         .news-card {
             margin-bottom: 1.5rem;
         }
+
         .news-card img {
             height: 200px;
             object-fit: cover;
         }
+
         .news-title {
             font-size: 1.25rem;
             font-weight: bold;
         }
+
         .news-content {
             font-size: 1rem;
         }
+
         .btn-action {
             margin-right: 0.5rem;
         }
@@ -35,7 +40,8 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">M&T News</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -45,6 +51,9 @@
                 </li>
             </ul>
             <a href="/signupnews" class="btn btn-outline-success">Add News</a>
+            <form action="/logout" method="post" style="display:inline;">
+                <button class="btn btn-outline-success" type="submit">Logout</button>
+            </form>
         </div>
     </div>
 </nav>

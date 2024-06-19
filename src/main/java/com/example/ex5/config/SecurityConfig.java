@@ -20,7 +20,7 @@ public class SecurityConfig {
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/login", "/json", "/error","/signupnews" ,"/news/**", "/index/**","/").permitAll()
-                                .requestMatchers("/edit/**", "/delete/**").hasRole("ADMIN")
+                                .requestMatchers("/edit/**", "/delete/**", "/addnews/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
@@ -31,9 +31,11 @@ public class SecurityConfig {
                 )
                 .logout(logout ->
                         logout
+                                .logoutUrl("/logout")
                                 .logoutSuccessUrl("/login?logout")
                                 .permitAll()
-                );
+                )
+                .csrf().disable(); // ניתן לבטל את ה-CSRF רק לצורך הדוגמה. מומלץ להפעיל אותו בסביבת ייצור.
         return http.build();
     }
 
