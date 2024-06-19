@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Messages</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h2>Messages</h2>
+    <form action="/messages/add" method="post">
+        <div class="form-group">
+            <label for="content">New Message:</label>
+            <input type="text" id="content" name="content" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Message</button>
+    </form>
+    <hr>
+    <ul class="list-group">
+        <li th:each="message : ${messages}" class="list-group-item">
+            <span th:text="${message.content}"></span>
+            <span th:if="${message.approved}" class="badge badge-success">Approved</span>
+            <span th:if="${!message.approved}" class="badge badge-warning">Pending</span>
+            <form th:action="@{/messages/approve}" method="post" style="display: inline;">
+                <input type="hidden" name="id" th:value="${message.id}">
+                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+            </form>
+            <form th:action="@{/messages/delete}" method="post" style="display: inline;">
+                <input type="hidden" name="id" th:value="${message.id}">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+        </li>
+    </ul>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
