@@ -19,8 +19,8 @@ public class SecurityConfig {
         http
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/login", "/json", "/error","/signupnews" ,"/news/**", "/index/**","/").permitAll()
-                                .requestMatchers("/edit/**", "/delete/**", "/addnews/**").hasRole("ADMIN")
+                                .requestMatchers("/login", "/json", "/error", "/messages/**", "/").permitAll()
+                                .requestMatchers("/edit/**", "/delete/**","/index/**", "/signupnews" ,"/news/**","/addnews/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->

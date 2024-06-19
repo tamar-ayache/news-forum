@@ -1,5 +1,7 @@
 package com.example.ex5.controllers;
 
+import com.example.ex5.repo.Message;
+import com.example.ex5.repo.MessageRepository;
 import com.example.ex5.repo.News;
 import com.example.ex5.repo.NewsRepository;
 import com.example.ex5.services.NewsService;
@@ -12,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -25,6 +28,9 @@ public class NewsController {
 
     @Autowired
     private NewsService newsService;
+
+    @Autowired
+    private MessageRepository messageRepository;
 
     @GetMapping("/news")
     public String main(News news, Model model) {
@@ -48,11 +54,6 @@ public class NewsController {
         return "redirect:/news";
     }
 
-    @GetMapping("/addnews")
-    public String showAddNewsForm(News news, Model model) {
-        return "redirect:/";
-    }
-
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public String showUpdateForm(@PathVariable("id") long id, Model model) {
@@ -72,11 +73,6 @@ public class NewsController {
         return "redirect:/news";
     }
 
-    @GetMapping("/update/{id}")
-    public String updateNewsGet() {
-        return "redirect:/";
-    }
-
     @PostMapping("/delete")
     @PreAuthorize("hasRole('ADMIN')")
     public String deleteNews(@RequestParam("id") long id, Model model) {
@@ -85,17 +81,7 @@ public class NewsController {
         return "redirect:/news";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteNewsGet(@PathVariable long id) {
-        return "redirect:/";
-    }
-
-    @GetMapping("/delete")
-    public String deleteNewsGetNoParams() {
-        return "redirect:/";
-    }
-
-    @GetMapping(value = "/json")
+    @GetMapping("/json")
     public String json(Model model) {
         return "json";
     }
@@ -103,5 +89,32 @@ public class NewsController {
     @GetMapping("/error")
     public String error() {
         return "error";
+    }
+
+    @GetMapping("/messages")
+    public String viewMessages(Model model) {
+        List<Message> messages = messageRepository.findAll();
+        model.addAttribute("messages", messages);
+        return "messages";
+    }
+
+    @PostMapping("/messages/add")
+    public String addMessage(@RequestParam String content, HttpSession session) {
+        Message message = new Message();
+        message.setContent(content);
+        message.setApproved(false);
+        messageRepository.save(message);
+        return "redirect:/messages";
+    }
+
+    @PostMapping("/messages/approve")
+    public String approveMessage(@RequestParam Long id, HttpSession session) {
+        String role = (String) session.getAttribute("role");
+        if ("ADMIN".equals(role)) {
+            Message message = messageRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid message Id:" + id));
+            message.setApproved(true);
+            messageRepository.save(message);
+        }
+        return "redirect:/messages";
     }
 }
