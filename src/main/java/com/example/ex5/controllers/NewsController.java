@@ -44,9 +44,7 @@ public class NewsController {
         if (result.hasErrors()) {
             return "add-news";
         }
-
         repository.save(news);
-
         return "redirect:/news";
     }
 
@@ -70,10 +68,8 @@ public class NewsController {
             news.setId(id);
             return "update-news";
         }
-
         repository.save(news);
-        model.addAttribute("newsp", repository.findAll());
-        return "index";
+        return "redirect:/news";
     }
 
     @GetMapping("/update/{id}")
@@ -86,8 +82,7 @@ public class NewsController {
     public String deleteNews(@RequestParam("id") long id, Model model) {
         News news = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid news Id:" + id));
         repository.delete(news);
-        model.addAttribute("newsp", repository.findAll());
-        return "index";
+        return "redirect:/news";
     }
 
     @GetMapping("/delete/{id}")

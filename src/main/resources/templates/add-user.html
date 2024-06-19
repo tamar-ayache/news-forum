@@ -11,7 +11,7 @@
 <body>
 <div class="container my-5">
     <h2 class="mb-5">New User</h2>
-    <p>For exaplanations about Thymeleaf in this form: see
+    <p>For explanations about Thymeleaf in this form: see
         <a href="https://spring.io/guides/gs/handling-form-submission/">https://spring.io/guides/gs/handling-form-submission/</a>
     </p>
     <div class="row">
@@ -20,13 +20,12 @@
             <!--  th:object: declares the model object to use for collecting the form data
             th:field: the fields in the user object.
             -->
-            <form action="#" th:action="@{/adduser}" th:object="${user}" method="post">
+            <form action="/adduser" th:object="${user}" method="post">
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="userName" class="col-form-label">Name</label>
                         <input type="text" th:field="*{userName}" class="form-control" id="userName" placeholder="Name">
                         <!-- this is equivalent to : <input type="text" th:field="*{name}" -->
-
                         <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-6">
@@ -35,9 +34,9 @@
                         <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="email" class="col-form-label">Visits</label>
-                        <input type="text" th:field="*{visits}" class="form-control" id="visits" placeholder="Email">
-                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{visits}" class="text-danger"></span>
+                        <label for="visits" class="col-form-label">Visits</label>
+                        <input type="text" th:field="*{visits}" class="form-control" id="visits" placeholder="Visits">
+                        <span th:if="${#fields.hasErrors('visits')}" th:errors="*{visits}" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
