@@ -1,7 +1,6 @@
 package com.example.ex5.controllers;
 
-import com.example.ex5.repo.Message;
-import com.example.ex5.repo.MessageRepository;
+
 import com.example.ex5.repo.News;
 import com.example.ex5.repo.NewsRepository;
 import com.example.ex5.services.NewsService;
@@ -34,8 +33,6 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
-    @Autowired
-    private MessageRepository messageRepository;
 
     @Autowired
     public NewsController(NewsService newsService) {
@@ -118,30 +115,5 @@ public class NewsController {
         return "error";
     }
 
-    @GetMapping("/messages")
-    public String viewMessages(Model model) {
-        List<Message> messages = messageRepository.findAll();
-        model.addAttribute("messages", messages);
-        return "messages";
-    }
 
-    @PostMapping("/messages/add")
-    public String addMessage(@RequestParam String content, HttpSession session) {
-        Message message = new Message();
-        message.setContent(content);
-        message.setApproved(false);
-        messageRepository.save(message);
-        return "redirect:/messages";
-    }
-
-    @PostMapping("/messages/approve")
-    public String approveMessage(@RequestParam Long id, HttpSession session) {
-        String role = (String) session.getAttribute("role");
-        if ("ADMIN".equals(role)) {
-            Message message = messageRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid message Id:" + id));
-            message.setApproved(true);
-            messageRepository.save(message);
-        }
-        return "redirect:/messages";
-    }
 }
