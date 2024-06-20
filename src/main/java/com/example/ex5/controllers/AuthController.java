@@ -10,8 +10,11 @@ import org.springframework.web.bind.support.SessionStatus;
 public class AuthController {
 
     @GetMapping("/login")
-    public String showLoginForm(Model model) {
+    public String showLoginForm(Model model, @RequestParam(name = "error", required = false) String error) {
         model.addAttribute("role", "");
+        if (error != null) {
+            model.addAttribute("loginError", true);
+        }
         return "login";
     }
 
@@ -25,7 +28,7 @@ public class AuthController {
             model.addAttribute("role", "ROLE_ANONYMOUS");
             return "redirect:/news";
         } else {
-            return "login";
+            return "redirect:/login?error=true";
         }
     }
 

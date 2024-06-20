@@ -40,9 +40,7 @@ public class News implements Serializable {
     }
 
     public void setTitle(String title) {
-        if (title.length() > 50) {
-            throw new IllegalArgumentException("Title cannot exceed 32 characters");
-        }
+
         this.title = title;
     }
 
@@ -51,9 +49,7 @@ public class News implements Serializable {
     }
 
     public void setContent(String content) {
-        if (content.length() > 255) {
-            throw new IllegalArgumentException("Content cannot exceed 255 characters");
-        }
+
         this.content = content;
     }
 
