@@ -70,6 +70,7 @@ public class NewsController {
     }
 
     @PostMapping("/addnews")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addNews(@Valid News news, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "add-news";
