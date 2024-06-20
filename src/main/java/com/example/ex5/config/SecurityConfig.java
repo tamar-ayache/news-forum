@@ -19,23 +19,30 @@ public class SecurityConfig {
         http
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/login", "/json", "/error", "/messages/**", "/").permitAll()
-                                .requestMatchers("/edit/**", "/delete/**","/index/**", "/signupnews" ,"/news/**","/addnews/**").hasRole("ADMIN")
+                                .requestMatchers("/login", "/json", "/error", "/messages/**", "/news/**", "/").permitAll()
+                                .requestMatchers("/edit/**", "/delete/**", "/signupnews", "/addnews/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
                         formLogin
                                 .loginPage("/login")
-                                .defaultSuccessUrl("/", true)
+                                .defaultSuccessUrl("/news", true)
                                 .permitAll()
                 )
                 .logout(logout ->
                         logout
                                 .logoutUrl("/logout")
                                 .logoutSuccessUrl("/login?logout")
+                                .invalidateHttpSession(true)
+                                .deleteCookies("JSESSIONID")
                                 .permitAll()
                 )
                 .csrf().disable(); // ניתן לבטל את ה-CSRF רק לצורך הדוגמה. מומלץ להפעיל אותו בסביבת ייצור.
+
+        http
+                .anonymous()
+                .authorities("ROLE_ANONYMOUS"); // הוספת משתמש אורח
+
         return http.build();
     }
 

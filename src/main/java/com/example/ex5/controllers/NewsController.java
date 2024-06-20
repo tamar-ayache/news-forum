@@ -8,6 +8,9 @@ import com.example.ex5.services.NewsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import javax.servlet.http.HttpSession;
+//import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -37,6 +41,16 @@ public class NewsController {
         model.addAttribute("course", someProperty);
         List<News> newsList = repository.findAll();
         model.addAttribute("newsp", newsList);
+
+        // Fetch authenticated user details
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Get the username
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")); // Check if user has ROLE_ADMIN
+
+        model.addAttribute("username", username);
+        model.addAttribute("isAdmin", isAdmin);
+
         return "index";
     }
 
