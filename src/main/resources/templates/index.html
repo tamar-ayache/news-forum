@@ -58,7 +58,7 @@
             <a th:if="${isAdmin}" href="/signupnews" class="btn btn-outline-success">Add News</a>
             <form action="/logout" method="post" style="display:inline;">
                 <button  th:if="${isAdmin}" class="btn btn-outline-success" type="submit">Logout</button>
-                <button   class="btn btn-outline-success" type="submit">logout</button>
+                <button  th:if="${!isAdmin}" class="btn btn-outline-success" type="submit">login</button>
             </form>
         </div>
     </div>
@@ -66,6 +66,9 @@
 <div class="container">
     <h1 class="text-center my-5">Latest News</h1>
     <div class="row">
+        <p th:if="${isAdmin}">You are an admin</p>
+        <p th:if="${!isAdmin}">You are an host</p>
+
         <div th:if="${#lists.isEmpty(newsp)}" class="col-md-12 text-center my-5">
             <h2>No news yet!</h2>
         </div>
