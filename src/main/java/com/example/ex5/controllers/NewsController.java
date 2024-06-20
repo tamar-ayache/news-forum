@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 //import javax.validation.Valid;
@@ -36,6 +37,18 @@ public class NewsController {
     @Autowired
     private MessageRepository messageRepository;
 
+    @Autowired
+    public NewsController(NewsService newsService) {
+        this.newsService = newsService;
+    }
+
+    @GetMapping("/")
+    public ModelAndView home(ModelAndView modelAndView) {
+        List<News> newsList = repository.findAll();
+        modelAndView.addObject("newsp", newsList);
+        modelAndView.setViewName("index");
+        return modelAndView;
+    }
     @GetMapping("/news")
     public String main(News news, Model model) {
         model.addAttribute("course", someProperty);

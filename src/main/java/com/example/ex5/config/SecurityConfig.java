@@ -19,7 +19,7 @@ public class SecurityConfig {
         http
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/login", "/json", "/error", "/messages/**", "/news/**", "/").permitAll()
+                                .requestMatchers("/login", "/json", "/error", "/news/**", "/").permitAll()
                                 .requestMatchers("/edit/**", "/delete/**", "/signupnews", "/addnews/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )

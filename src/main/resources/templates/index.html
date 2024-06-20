@@ -52,13 +52,12 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
                 </li>
             </ul>
-            <a th:if="${isAdmin}" href="/signupnews" class="btn btn-outline-success">Add News</a>
+            <a th:if="${isAdmin != null && isAdmin}" href="/signupnews" class="btn btn-outline-success">Add News</a>
             <form action="/logout" method="post" style="display:inline;">
-                <button  th:if="${isAdmin}" class="btn btn-outline-success" type="submit">Logout</button>
-                <button  th:if="${!isAdmin}" class="btn btn-outline-success" type="submit">login</button>
+                <button  th:if="${isAdmin != null && isAdmin}" class="btn btn-outline-success" type="submit">Logout</button>
+                <button  th:if="${isAdmin == null || !isAdmin}" class="btn btn-outline-success" type="submit">Login</button>
             </form>
         </div>
     </div>
@@ -66,8 +65,8 @@
 <div class="container">
     <h1 class="text-center my-5">Latest News</h1>
     <div class="row">
-        <p th:if="${isAdmin}">You are an admin</p>
-        <p th:if="${!isAdmin}">You are an host</p>
+        <p th:if="${isAdmin != null && isAdmin}">You are an admin</p>
+        <p th:if="${isAdmin == null || !isAdmin}">You are an host</p>
 
         <div th:if="${#lists.isEmpty(newsp)}" class="col-md-12 text-center my-5">
             <h2>No news yet!</h2>
@@ -80,7 +79,7 @@
                             <h5 th:text="${news.title}" class="card-title news-title"></h5>
                             <p th:text="${news.content}" class="card-text news-content"></p>
                         </div>
-                        <div  th:if="${isAdmin}" class="card-footer d-flex justify-content-between">
+                        <div th:if="${isAdmin != null && isAdmin}" class="card-footer d-flex justify-content-between">
                             <a th:href="@{/edit/{id}(id=${news.id})}" class="btn btn-primary btn-action">EDIT</a>
                             <form action="#" th:action="@{/delete}" th:object="${news}" method="post">
                                 <input type="hidden" name="id" th:value="${news.id}">
@@ -91,7 +90,7 @@
                 </div>
             </div>
         </div>
-        <div th:if="${isAdmin}" class="col-md-12 text-center my-5">
+        <div th:if="${isAdmin != null && isAdmin}" class="col-md-12 text-center my-5">
             <a href="/signupnews" class="btn btn-primary">Add News</a>
         </div>
     </div>
