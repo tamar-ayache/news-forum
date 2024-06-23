@@ -1,64 +1,54 @@
 package com.example.ex5.repo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
-
+import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class News implements Serializable {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @NotEmpty(message = "Title is mandatory")
-    @Size(max = 50, message = "Title cannot exceed 50 characters")
+    @Column(nullable = false)
     private String title;
 
-    @NotEmpty(message = "Content is mandatory")
-    @Size(max = 255, message = "Content cannot exceed 255 characters")
+    @Column(nullable = false)
     private String content;
 
-    public News() {}
+    @OneToMany(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 
-    public News(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getId() {
+    // Getters and Setters
+    public Long getId() {
         return id;
     }
 
-    public void setTitle(String title) {
-
-        this.title = title;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setContent(String content) {
-
-        this.content = content;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContent() {
         return content;
     }
 
-    @Override
-    public String toString() {
-        return "News{" + "id=" + id + ", title='" + title + '\'' + ", content='" + content + '\'' + '}';
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

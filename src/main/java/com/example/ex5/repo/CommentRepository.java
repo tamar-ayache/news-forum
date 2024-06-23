@@ -1,9 +1,8 @@
-//package com.example.ex5.repo;
-//
-//import org.springframework.data.jpa.repository.JpaRepository;
-//
-//import java.util.List;
-//
-//public interface CommentRepository extends JpaRepository<Comment, Long> {
-//    List<Comment> findByNewsId(Long newsId);
-//}
+package com.example.ex5.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+public interface CommentRepository extends JpaRepository<Comment, Long> {
+    List<Comment> findByNewsId(Long newsId);
+}

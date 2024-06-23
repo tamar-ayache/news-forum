@@ -12,32 +12,39 @@
             padding-top: 3.5rem;
             background-color: #f8f9fa;
         }
-
         .news-card {
             margin-bottom: 1.5rem;
         }
-
         .news-card img {
             height: 200px;
             object-fit: cover;
         }
-
         .news-title {
             font-size: 1.25rem;
             font-weight: bold;
         }
-
         .news-content {
             font-size: 1rem;
         }
-
         .btn-action {
             margin-right: 0.5rem;
         }
-
         .footer-text {
             margin-top: 2rem;
             font-weight: bold;
+        }
+        .comment {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .comment-header {
+            font-weight: bold;
+        }
+        .comment-body {
+            margin-top: 0.5rem;
         }
     </style>
 </head>
@@ -50,14 +57,11 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                <li class="nav-item">
-                </li>
-            </ul>
+            <ul class="navbar-nav me-auto mb-2 mb-md-0"></ul>
             <a th:if="${isAdmin != null && isAdmin}" href="/signupnews" class="btn btn-outline-success">Add News</a>
-            <form action="/logout" method="post" style="display:inline;">
-                <button  th:if="${isAdmin != null && isAdmin}" class="btn btn-outline-success" type="submit">Logout</button>
-                <button  th:if="${isAdmin == null || !isAdmin}" class="btn btn-outline-success" type="submit">Login</button>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button th:if="${isAdmin != null && isAdmin}" class="btn btn-outline-success" type="submit">Logout</button>
+                <button th:if="${isAdmin == null || !isAdmin}" class="btn btn-outline-success" type="submit">Login</button>
             </form>
         </div>
     </div>
@@ -65,8 +69,6 @@
 <div class="container">
     <h1 class="text-center my-5">Latest News</h1>
     <div class="row">
-        <p th:if="${isAdmin != null && isAdmin}">You are an admin</p>
-        <p th:if="${isAdmin == null || !isAdmin}">You are an host</p>
 
         <div th:if="${#lists.isEmpty(newsp)}" class="col-md-12 text-center my-5">
             <h2>No news yet!</h2>
@@ -81,9 +83,34 @@
                         </div>
                         <div th:if="${isAdmin != null && isAdmin}" class="card-footer d-flex justify-content-between">
                             <a th:href="@{/edit/{id}(id=${news.id})}" class="btn btn-primary btn-action">EDIT</a>
-                            <form action="#" th:action="@{/delete}" th:object="${news}" method="post">
+                            <form th:action="@{/delete}" th:object="${news}" method="post">
                                 <input type="hidden" name="id" th:value="${news.id}">
                                 <input class="btn btn-danger" type="submit" value="DELETE"/>
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <h6>Comments</h6>
+                            <div th:each="comment : ${news.comments}" class="comment">
+                                <div class="comment-header">
+                                    <span th:text="${comment.user.username}"></span>
+                                    <br/>
+<!--                                    <span th:text="${comment.createdAt}"></span>-->
+<!--                                    <div th:if="${comment.user.username == #authentication.name}">-->
+<!--                                        <form th:action="@{/comments/edit}" method="post">-->
+<!--                                            <input type="hidden" name="commentId" th:value="${comment.id}">-->
+<!--                                            <input type="text" name="content" th:value="${comment.content}">-->
+<!--                                            <button type="submit" class="btn btn-primary btn-sm">Edit</button>-->
+<!--                                        </form>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="comment-body">-->
+                                    <p th:text="${comment.content}"></p>
+                                </div>
+                            </div>
+                            <form th:action="@{/comments/add}" method="post">
+                                <input type="hidden" name="newsId" th:value="${news.id}">
+                                <textarea name="content" class="form-control" rows="2" placeholder="Add a comment"></textarea>
+                                <button type="submit" class="btn btn-primary btn-sm mt-2">Submit</button>
                             </form>
                         </div>
                     </div>
@@ -94,7 +121,6 @@
             <a href="/signupnews" class="btn btn-primary">Add News</a>
         </div>
     </div>
-
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
