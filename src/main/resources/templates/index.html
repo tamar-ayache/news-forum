@@ -15,10 +15,6 @@
         .news-card {
             margin-bottom: 1.5rem;
         }
-        .news-card img {
-            height: 200px;
-            object-fit: cover;
-        }
         .news-title {
             font-size: 1.25rem;
             font-weight: bold;
@@ -69,50 +65,56 @@
 <div class="container">
     <h1 class="text-center my-5">Latest News</h1>
     <div class="row">
-
         <div th:if="${#lists.isEmpty(newsp)}" class="col-md-12 text-center my-5">
             <h2>No news yet!</h2>
         </div>
         <div th:if="${not #lists.isEmpty(newsp)}" class="col-md-12">
-            <div class="row">
-                <div th:each="news : ${newsp}" class="col-md-4 news-card">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 th:text="${news.title}" class="card-title news-title"></h5>
-                            <p th:text="${news.content}" class="card-text news-content"></p>
-                        </div>
-                        <div th:if="${isAdmin != null && isAdmin}" class="card-footer d-flex justify-content-between">
-                            <a th:href="@{/edit/{id}(id=${news.id})}" class="btn btn-primary btn-action">EDIT</a>
-                            <form th:action="@{/delete}" th:object="${news}" method="post">
-                                <input type="hidden" name="id" th:value="${news.id}">
-                                <input class="btn btn-danger" type="submit" value="DELETE"/>
-                            </form>
-                        </div>
-                        <div class="card-footer">
-                            <h6>Comments</h6>
-                            <div th:each="comment : ${news.comments}" class="comment">
+            <div th:each="news : ${newsp}" class="news-card">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 th:text="${news.title}" class="card-title news-title"></h5>
+                        <p th:text="${news.content}" class="card-text news-content"></p>
+                    </div>
+                    <div th:if="${isAdmin != null && isAdmin}" class="card-footer d-flex justify-content-between">
+                        <a th:href="@{/edit/{id}(id=${news.id})}" class="btn btn-primary btn-action">EDIT</a>
+                        <form th:action="@{/delete}" th:object="${news}" method="post">
+                            <input type="hidden" name="id" th:value="${news.id}">
+                            <input class="btn btn-danger" type="submit" value="DELETE"/>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <h6>Comments</h6>
+                        <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#collapseComments' + ${news.id}" aria-expanded="false" th:aria-controls="'collapseComments' + ${news.id}">
+                            View Comments
+                        </button>
+                        <div th:id="'collapseComments' + ${news.id}" class="collapse">
+                            <div th:each="comment, iterStat : ${news.comments}" th:if="${iterStat.index < 3}" class="comment">
                                 <div class="comment-header">
                                     <span th:text="${comment.user.username}"></span>
-                                    <br/>
-<!--                                    <span th:text="${comment.createdAt}"></span>-->
-<!--                                    <div th:if="${comment.user.username == #authentication.name}">-->
-<!--                                        <form th:action="@{/comments/edit}" method="post">-->
-<!--                                            <input type="hidden" name="commentId" th:value="${comment.id}">-->
-<!--                                            <input type="text" name="content" th:value="${comment.content}">-->
-<!--                                            <button type="submit" class="btn btn-primary btn-sm">Edit</button>-->
-<!--                                        </form>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="comment-body">-->
+                                </div>
+                                <div class="comment-body">
                                     <p th:text="${comment.content}"></p>
                                 </div>
                             </div>
-                            <form th:action="@{/comments/add}" method="post">
-                                <input type="hidden" name="newsId" th:value="${news.id}">
-                                <textarea name="content" class="form-control" rows="2" placeholder="Add a comment"></textarea>
-                                <button type="submit" class="btn btn-primary btn-sm mt-2">Submit</button>
-                            </form>
+                            <button th:if="${#lists.size(news.comments) > 3}" class="btn btn-secondary btn-sm mt-2" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#allComments' + ${news.id}" aria-expanded="false" th:aria-controls="'allComments' + ${news.id}">
+                                Show more Comments
+                            </button>
+                            <div th:id="'allComments' + ${news.id}" class="collapse">
+                                <div th:each="comment, iterStat : ${news.comments}" th:if="${iterStat.index >= 3}" class="comment">
+                                    <div class="comment-header">
+                                        <span th:text="${comment.user.username}"></span>
+                                    </div>
+                                    <div class="comment-body">
+                                        <p th:text="${comment.content}"></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <form th:action="@{/comments/add}" method="post">
+                            <input type="hidden" name="newsId" th:value="${news.id}">
+                            <textarea name="content" class="form-control" rows="2" placeholder="Add a comment"></textarea>
+                            <button type="submit" class="btn btn-primary btn-sm mt-2">Submit</button>
+                        </form>
                     </div>
                 </div>
             </div>
