@@ -69,26 +69,20 @@
             <h2>No news yet!</h2>
         </div>
         <div th:if="${not #lists.isEmpty(newsp)}" class="col-md-12">
-            <div th:each="news : ${newsp}" class="news-card">
+            <div th:each="i : ${#numbers.sequence(newsp.size() - 1, 0, -1)}" class="news-card" th:with="news=${newsp[i]}">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 th:text="${news.title}" class="card-title news-title"></h5>
                         <p th:text="${news.content}" class="card-text news-content"></p>
                     </div>
-                    <div th:if="${isAdmin != null && isAdmin}" class="card-footer d-flex justify-content-between">
-                        <a th:href="@{/edit/{id}(id=${news.id})}" class="btn btn-primary btn-action">EDIT</a>
-                        <form th:action="@{/delete}" th:object="${news}" method="post">
-                            <input type="hidden" name="id" th:value="${news.id}">
-                            <input class="btn btn-danger" type="submit" value="DELETE"/>
-                        </form>
-                    </div>
+
                     <div class="card-footer">
                         <h6>Comments</h6>
                         <button th:if="${#lists.size(news.comments) > 0}" class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#collapseComments' + ${news.id}" aria-expanded="false" th:aria-controls="'collapseComments' + ${news.id}">
                             View Comments
                         </button>
                         <div th:id="'collapseComments' + ${news.id}" class="collapse">
-                            <div th:each="comment, iterStat : ${news.comments}" th:if="${iterStat.index < 3}" class="comment">
+                            <div th:each="i, iterStat : ${#numbers.sequence(news.comments.size() - 1, 0, -1)}" th:with="comment=${news.comments[i]}" th:if="${iterStat.index < 3}" class="comment">
                                 <div class="comment-header">
                                     <span th:text="${comment.user.username}"></span>
                                 </div>
@@ -100,7 +94,7 @@
                                 Show more Comments
                             </button>
                             <div th:id="'allComments' + ${news.id}" class="collapse">
-                                <div th:each="comment, iterStat : ${news.comments}" th:if="${iterStat.index >= 3}" class="comment">
+                                <div th:each="i, iterStat : ${#numbers.sequence(news.comments.size() - 1, 0, -1)}" th:with="comment=${news.comments[i]}" th:if="${iterStat.index >= 3}" class="comment">
                                     <div class="comment-header">
                                         <span th:text="${comment.user.username}"></span>
                                     </div>
@@ -114,6 +108,13 @@
                             <input type="hidden" name="newsId" th:value="${news.id}">
                             <textarea name="content" class="form-control" rows="2" placeholder="Add a comment"></textarea>
                             <button type="submit" class="btn btn-primary btn-sm mt-2">Submit</button>
+                        </form>
+                    </div>
+                    <div th:if="${isAdmin != null && isAdmin}" class="card-footer d-flex justify-content-between">
+                        <a th:href="@{/edit/{id}(id=${news.id})}" class="btn btn-primary btn-action">EDIT</a>
+                        <form th:action="@{/delete}" th:object="${news}" method="post">
+                            <input type="hidden" name="id" th:value="${news.id}">
+                            <input class="btn btn-danger" type="submit" value="DELETE"/>
                         </form>
                     </div>
                 </div>

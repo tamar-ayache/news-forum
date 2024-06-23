@@ -3,41 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <title>Signup Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #666;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .role-options {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #ownerCodeSection {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-<h2>Signup</h2>
-<form action="/signup" method="post">
-  <label for="username">Username:</label>
-  <input type="text" id="username" name="username" required maxlength="20"><br><br>
+<div class="container">
+  <h2>Signup</h2>
+  <form action="/signup" method="post">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required maxlength="20"><br><br>
 
-  <label for="password">Password:</label>
-  <input type="password" id="password" name="password" required maxlength="50"><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required maxlength="50"><br><br>
 
-  <label>Role:</label><br>
-  <input type="radio" id="roleUser" name="role" value="USER" checked>
-  <label for="roleUser">User</label><br>
-  <input type="radio" id="roleAdmin" name="role" value="ADMIN" onclick="toggleOwnerCode()"><!-- Add onclick event here -->
-  <label for="roleAdmin">Admin</label><br><br>
+    <label>Role:</label><br>
+    <div class="role-options">
+      <input type="radio" id="roleUser" name="role" value="USER" checked onclick="document.getElementById('ownerCodeSection').style.display='none'">
+      <label for="roleUser">User</label>
+      <input type="radio" id="roleAdmin" name="role" value="ADMIN" onclick="document.getElementById('ownerCodeSection').style.display='block'">
+      <label for="roleAdmin">Admin</label>
+    </div>
 
-  <!-- Owner Code input -->
-  <div id="ownerCodeSection" style="display: none;">
-    <label for="ownerCode">Owner Code:</label>
-    <input type="text" id="ownerCode" name="ownerCode"><br><br>
-  </div>
+    <!-- Owner Code input -->
+    <div id="ownerCodeSection">
+      <label for="ownerCode">Owner Code:</label>
+      <input type="text" id="ownerCode" name="ownerCode"><br><br>
+    </div>
 
-  <button type="submit">Signup</button>
-</form>
-
-<script>
-  // Function to toggle the display of owner code input based on admin role selection
-  function toggleOwnerCode() {
-    var roleAdmin = document.getElementById("roleAdmin");
-    var ownerCodeSection = document.getElementById("ownerCodeSection");
-
-    // Display owner code input if admin role is selected, hide it otherwise
-    ownerCodeSection.style.display = roleAdmin.checked ? "block" : "none";
-  }
-</script>
-
+    <button type="submit">Signup</button>
+  </form>
+</div>
 </body>
 </html>

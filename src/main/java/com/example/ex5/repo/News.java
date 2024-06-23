@@ -1,13 +1,16 @@
 package com.example.ex5.repo;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 public class News implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
