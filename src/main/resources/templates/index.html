@@ -56,8 +56,8 @@
             <ul class="navbar-nav me-auto mb-2 mb-md-0"></ul>
             <a th:if="${isAdmin != null && isAdmin}" href="/signupnews" class="btn btn-outline-success">Add News</a>
             <form th:action="@{/logout}" method="post" style="display:inline;">
-                <button th:if="${isAdmin != null && isAdmin}" class="btn btn-outline-success" type="submit">Logout</button>
-                <button th:if="${isAdmin == null || !isAdmin}" class="btn btn-outline-success" type="submit">Login</button>
+                <button th:if="${isAdmin != null && isAdmin || isUser !=null && isUser}" class="btn btn-outline-success" type="submit">Logout</button>
+                <button th:if="${isAdmin == null && isUser == null || !isAdmin && !isUser}" class="btn btn-outline-success" type="submit">Login</button>
             </form>
         </div>
     </div>
@@ -84,7 +84,7 @@
                     </div>
                     <div class="card-footer">
                         <h6>Comments</h6>
-                        <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#collapseComments' + ${news.id}" aria-expanded="false" th:aria-controls="'collapseComments' + ${news.id}">
+                        <button th:if="${#lists.size(news.comments) > 0}" class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#collapseComments' + ${news.id}" aria-expanded="false" th:aria-controls="'collapseComments' + ${news.id}">
                             View Comments
                         </button>
                         <div th:id="'collapseComments' + ${news.id}" class="collapse">

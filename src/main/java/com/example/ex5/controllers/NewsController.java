@@ -57,9 +57,12 @@ public class NewsController {
         String username = authentication.getName(); // Get the username
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")); // Check if user has ROLE_ADMIN
+        boolean isUser = authentication.getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals("ROLE_USER")); // Check if user has ROLE_USER
 
         model.addAttribute("username", username);
         model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isUser", isUser);
 
         return "index";
     }
