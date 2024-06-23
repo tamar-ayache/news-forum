@@ -1,5 +1,7 @@
 package com.example.ex5.controllers;
 
+import com.example.ex5.services.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +10,13 @@ import org.springframework.web.bind.support.SessionStatus;
 @Controller
 @SessionAttributes("role")
 public class AuthController {
+
+    private final CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    public AuthController(CustomUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @GetMapping("/login")
     public String showLoginForm(Model model, @RequestParam(name = "error", required = false) String error) {
@@ -20,14 +29,11 @@ public class AuthController {
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password, Model model) {
-        if ("admin".equals(username) && "admin".equals(password)) {
-            model.addAttribute("isAdmin", true);
-            model.addAttribute("role", "ADMIN");
-            return "redirect:/news";
-        } else if ("user".equals(username) && "userpass".equals(password)) {
+        try {
+            userDetailsService.loadUserByUsername(username);
             model.addAttribute("role", "ROLE_ANONYMOUS");
             return "redirect:/news";
-        } else {
+        } catch (Exception e) {
             return "redirect:/login?error=true";
         }
     }

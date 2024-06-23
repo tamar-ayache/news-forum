@@ -1,25 +1,37 @@
 package com.example.ex5.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final UserDetailsService userDetailsService;
+
+    @Autowired
+    public SecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/login", "/json", "/error", "/news/**", "/").permitAll()
+                                .requestMatchers("/login", "/signup", "/error", "/news/**", "/").permitAll()
                                 .requestMatchers("/edit/**", "/delete/**", "/signupnews", "/addnews/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
@@ -37,22 +49,12 @@ public class SecurityConfig {
                                 .deleteCookies("JSESSIONID")
                                 .permitAll()
                 )
-                .csrf().disable(); // ניתן לבטל את ה-CSRF רק לצורך הדוגמה. מומלץ להפעיל אותו בסביבת ייצור.
+                .csrf().disable();
 
         http
                 .anonymous()
-                .authorities("ROLE_ANONYMOUS"); // הוספת משתמש אורח
+                .authorities("ROLE_ANONYMOUS");
 
         return http.build();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails admin = User.withDefaultPasswordEncoder()
-                .username("admin")
-                .password("admin")
-                .roles("ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(admin);
     }
 }

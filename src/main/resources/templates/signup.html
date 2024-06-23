@@ -1,19 +1,43 @@
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--  <meta charset="UTF-8">-->
-<!--  <title>Signup Page</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--<h2>Signup</h2>-->
-<!--<form action="/signup" method="post">-->
-<!--  <label for="username">Username:</label>-->
-<!--  <input type="text" id="username" name="username" required maxlength="20"><br><br>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Signup Page</title>
+</head>
+<body>
+<h2>Signup</h2>
+<form action="/signup" method="post">
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username" required maxlength="20"><br><br>
 
-<!--  <label for="password">Password:</label>-->
-<!--  <input type="password" id="password" name="password" required maxlength="50"><br><br>-->
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" required maxlength="50"><br><br>
 
-<!--  <button type="submit">Signup</button>-->
-<!--</form>-->
-<!--</body>-->
-<!--</html>-->
+  <label>Role:</label><br>
+  <input type="radio" id="roleUser" name="role" value="USER" checked>
+  <label for="roleUser">User</label><br>
+  <input type="radio" id="roleAdmin" name="role" value="ADMIN" onclick="toggleOwnerCode()"><!-- Add onclick event here -->
+  <label for="roleAdmin">Admin</label><br><br>
+
+  <!-- Owner Code input -->
+  <div id="ownerCodeSection" style="display: none;">
+    <label for="ownerCode">Owner Code:</label>
+    <input type="text" id="ownerCode" name="ownerCode"><br><br>
+  </div>
+
+  <button type="submit">Signup</button>
+</form>
+
+<script>
+  // Function to toggle the display of owner code input based on admin role selection
+  function toggleOwnerCode() {
+    var roleAdmin = document.getElementById("roleAdmin");
+    var ownerCodeSection = document.getElementById("ownerCodeSection");
+
+    // Display owner code input if admin role is selected, hide it otherwise
+    ownerCodeSection.style.display = roleAdmin.checked ? "block" : "none";
+  }
+</script>
+
+</body>
+</html>
