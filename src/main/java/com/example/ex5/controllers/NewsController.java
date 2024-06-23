@@ -1,6 +1,5 @@
 package com.example.ex5.controllers;
 
-
 import com.example.ex5.repo.News;
 import com.example.ex5.repo.NewsRepository;
 import com.example.ex5.services.NewsService;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
-//import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -33,7 +30,6 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
-
     @Autowired
     public NewsController(NewsService newsService) {
         this.newsService = newsService;
@@ -46,6 +42,7 @@ public class NewsController {
         modelAndView.setViewName("index");
         return modelAndView;
     }
+
     @GetMapping("/news")
     public String main(News news, Model model) {
         model.addAttribute("course", someProperty);
@@ -118,6 +115,4 @@ public class NewsController {
     public String error() {
         return "error";
     }
-
-
 }

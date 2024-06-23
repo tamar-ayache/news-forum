@@ -29,6 +29,10 @@
         .btn-cancel {
             margin-top: 1rem;
         }
+
+        .comment {
+            margin-top: 1.5rem;
+        }
     </style>
 </head>
 <body>
@@ -42,6 +46,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
                 </li>
             </ul>
             <form action="/logout" method="post" style="display:inline;">
@@ -68,9 +73,20 @@
                 </div>
                 <div class="btn-group">
                     <button type="submit" class="btn btn-primary btn-update">Update</button>
+                    <a href="/news" class="btn btn-secondary btn-cancel">Cancel</a>
                 </div>
             </form>
+        </div>
+    </div>
 
+    <!-- הצגת התגובות -->
+    <div class="row comment">
+        <div class="col-md-6">
+            <h4>Comments</h4>
+            <div th:each="comment, iterStat : ${news.comments}" th:if="${iterStat.index < 3}" class="comment">
+                <p th:text="${comment.content}"></p>
+                <p><small>by <span th:text="${comment.user.username}"></span></small></p>
+            </div>
         </div>
     </div>
 </div>
