@@ -90,9 +90,7 @@
                                     <p th:text="${comment.content}"></p>
                                 </div>
                             </div>
-                            <button th:if="${#lists.size(news.comments) > 3}" class="btn btn-secondary btn-sm mt-2" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#allComments' + ${news.id}" aria-expanded="false" th:aria-controls="'allComments' + ${news.id}">
-                                Show more Comments
-                            </button>
+
                             <div th:id="'allComments' + ${news.id}" class="collapse">
                                 <div th:each="i, iterStat : ${#numbers.sequence(news.comments.size() - 1, 0, -1)}" th:with="comment=${news.comments[i]}" th:if="${iterStat.index >= 3}" class="comment">
                                     <div class="comment-header">
@@ -103,6 +101,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <button th:if="${#lists.size(news.comments) > 3}" class="btn btn-secondary btn-sm mt-2" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#allComments' + ${news.id}" aria-expanded="false" th:aria-controls="'allComments' + ${news.id}">
+                                Show all Comments
+                            </button>
                         </div>
                         <form th:action="@{/comments/add}" method="post">
                             <input type="hidden" name="newsId" th:value="${news.id}">
