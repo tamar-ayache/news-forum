@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest News</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script>
+        var stompClient = null;
+
+        function connect() {
+            var socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/news', function (newsItem) {
+                    handleNewsUpdate(newsItem.body);
+                });
+            });
+        }
+
+        function handleNewsUpdate(item) {
+            var newsList = document.getElementById("news-list");
+            for (var i = 0; i < newsList.children.length; i++) {
+                if (newsList.children[i].textContent.trim() === item.trim()) {
+                    newsList.removeChild(newsList.children[i]);
+                    break;
+                }
+            }
+        }
+
+        window.onload = connect;
+    </script>
+</head>
+<body>
+<h1>Latest News</h1>
+
+<h2>News Items</h2>
+<ul id="news-list">
+    <th:block th:each="item : ${newsItems}">
+        <li>
+            <span th:text="${item}"></span>
+            <form action="/addFavorite" method="post" style="display:inline;">
+                <input type="hidden" name="item" th:value="${item}">
+                <button type="submit">Add to Favorites</button>
+            </form>
+            <form action="/delete" method="post" style="display:inline;">
+                <input type="hidden" name="item" th:value="${item}">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    </th:block>
+</ul>
+
+<h2>Favorite Items</h2>
+<ul>
+    <th:block th:each="item : ${favorites}">
+        <li th:text="${item}"></li>
+    </th:block>
+</ul>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="/index.js"></script>
+</body>
+</html>

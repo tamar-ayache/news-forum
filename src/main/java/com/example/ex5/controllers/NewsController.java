@@ -6,6 +6,7 @@ import com.example.ex5.services.NewsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +27,9 @@ public class NewsController {
 
     @Autowired
     private NewsRepository repository;
+    @Autowired
+    private SimpMessagingTemplate template;
+
 
     @Autowired
     private NewsService newsService;
@@ -75,6 +79,8 @@ public class NewsController {
         if (result.hasErrors()) {
             return "add-news";
         }
+        // Send a message to the WebSocket clients to refresh the page
+        template.convertAndSend("/topic/newsDeleted", "news_deleted");
         repository.save(news);
         return "redirect:/news";
     }
@@ -94,6 +100,8 @@ public class NewsController {
             news.setId(id);
             return "update-news";
         }
+        // Send a message to the WebSocket clients to refresh the page
+        template.convertAndSend("/topic/newsDeleted", "news_deleted");
         repository.save(news);
         return "redirect:/news";
     }
@@ -103,6 +111,8 @@ public class NewsController {
     public String deleteNews(@RequestParam("id") long id, Model model) {
         News news = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid news Id:" + id));
         repository.delete(news);
+        // Send a message to the WebSocket clients to refresh the page
+        template.convertAndSend("/topic/newsDeleted", "news_deleted");
         return "redirect:/news";
     }
 
@@ -115,4 +125,5 @@ public class NewsController {
     public String error() {
         return "error";
     }
+
 }

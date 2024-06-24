@@ -12,23 +12,29 @@
             padding-top: 3.5rem;
             background-color: #f8f9fa;
         }
+
         .news-card {
             margin-bottom: 1.5rem;
         }
+
         .news-title {
             font-size: 1.25rem;
             font-weight: bold;
         }
+
         .news-content {
             font-size: 1rem;
         }
+
         .btn-action {
             margin-right: 0.5rem;
         }
+
         .footer-text {
             margin-top: 2rem;
             font-weight: bold;
         }
+
         .comment {
             margin-top: 1rem;
             padding: 0.5rem;
@@ -36,9 +42,11 @@
             border-radius: 5px;
             background-color: #f8f9fa;
         }
+
         .comment-header {
             font-weight: bold;
         }
+
         .comment-body {
             margin-top: 0.5rem;
         }
@@ -56,8 +64,12 @@
             <ul class="navbar-nav me-auto mb-2 mb-md-0"></ul>
             <a th:if="${isAdmin != null && isAdmin}" href="/signupnews" class="btn btn-outline-success">Add News</a>
             <form th:action="@{/logout}" method="post" style="display:inline;">
-                <button th:if="${isAdmin != null && isAdmin || isUser !=null && isUser}" class="btn btn-outline-success" type="submit">Logout</button>
-                <button th:if="${isAdmin == null && isUser == null || !isAdmin && !isUser}" class="btn btn-outline-success" type="submit">Login</button>
+                <button th:if="${isAdmin != null && isAdmin || isUser !=null && isUser}" class="btn btn-outline-success"
+                        type="submit">Logout
+                </button>
+                <button th:if="${isAdmin == null && isUser == null || !isAdmin && !isUser}"
+                        class="btn btn-outline-success" type="submit">Login
+                </button>
             </form>
         </div>
     </div>
@@ -69,7 +81,8 @@
             <h2>No news yet!</h2>
         </div>
         <div th:if="${not #lists.isEmpty(newsp)}" class="col-md-12">
-            <div th:each="i : ${#numbers.sequence(newsp.size() - 1, 0, -1)}" class="news-card" th:with="news=${newsp[i]}">
+            <div th:each="i : ${#numbers.sequence(newsp.size() - 1, 0, -1)}" class="news-card"
+                 th:with="news=${newsp[i]}">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 th:text="${news.title}" class="card-title news-title"></h5>
@@ -78,11 +91,14 @@
 
                     <div class="card-footer">
                         <h6>Comments</h6>
-                        <button th:if="${#lists.size(news.comments) > 0}" class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#collapseComments' + ${news.id}" aria-expanded="false" th:aria-controls="'collapseComments' + ${news.id}">
+                        <button th:if="${#lists.size(news.comments) > 0}" class="btn btn-secondary btn-sm" type="button"
+                                data-bs-toggle="collapse" th:attr="data-bs-target='#collapseComments' + ${news.id}"
+                                aria-expanded="false" th:aria-controls="'collapseComments' + ${news.id}">
                             View Comments
                         </button>
                         <div th:id="'collapseComments' + ${news.id}" class="collapse">
-                            <div th:each="i, iterStat : ${#numbers.sequence(news.comments.size() - 1, 0, -1)}" th:with="comment=${news.comments[i]}" th:if="${iterStat.index < 3}" class="comment">
+                            <div th:each="i, iterStat : ${#numbers.sequence(news.comments.size() - 1, 0, -1)}"
+                                 th:with="comment=${news.comments[i]}" th:if="${iterStat.index < 3}" class="comment">
                                 <div class="comment-header">
                                     <span th:text="${comment.user.username}"></span>
                                 </div>
@@ -92,7 +108,9 @@
                             </div>
 
                             <div th:id="'allComments' + ${news.id}" class="collapse">
-                                <div th:each="i, iterStat : ${#numbers.sequence(news.comments.size() - 1, 0, -1)}" th:with="comment=${news.comments[i]}" th:if="${iterStat.index >= 3}" class="comment">
+                                <div th:each="i, iterStat : ${#numbers.sequence(news.comments.size() - 1, 0, -1)}"
+                                     th:with="comment=${news.comments[i]}" th:if="${iterStat.index >= 3}"
+                                     class="comment">
                                     <div class="comment-header">
                                         <span th:text="${comment.user.username}"></span>
                                     </div>
@@ -101,13 +119,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <button th:if="${#lists.size(news.comments) > 3}" class="btn btn-secondary btn-sm mt-2" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#allComments' + ${news.id}" aria-expanded="false" th:aria-controls="'allComments' + ${news.id}">
+                            <button th:if="${#lists.size(news.comments) > 3}" class="btn btn-secondary btn-sm mt-2"
+                                    type="button" data-bs-toggle="collapse"
+                                    th:attr="data-bs-target='#allComments' + ${news.id}" aria-expanded="false"
+                                    th:aria-controls="'allComments' + ${news.id}">
                                 Show all Comments
                             </button>
                         </div>
                         <form th:action="@{/comments/add}" method="post">
                             <input type="hidden" name="newsId" th:value="${news.id}">
-                            <textarea name="content" class="form-control" rows="2" placeholder="Add a comment"></textarea>
+                            <textarea name="content" class="form-control" rows="2"
+                                      placeholder="Add a comment"></textarea>
                             <button type="submit" class="btn btn-primary btn-sm mt-2">Submit</button>
                         </form>
                     </div>
@@ -130,4 +152,21 @@
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
 </body>
+
 </html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script>
+    const socket = new SockJS('/ws');
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/newsDeleted', function (message) {
+
+            // Refresh the page
+            window.location.reload();
+
+        });
+    });
+</script>
