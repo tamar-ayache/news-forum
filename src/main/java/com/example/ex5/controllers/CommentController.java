@@ -9,6 +9,10 @@ import com.example.ex5.repo.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -30,6 +34,8 @@ public class CommentController {
     private final CommentRepository commentRepository;
     private final NewsRepository newsRepository;
     private final UserRepository userRepository;
+    @Autowired
+    private SimpMessagingTemplate template;
 
     @Autowired
     public CommentController(CommentRepository commentRepository, NewsRepository newsRepository, UserRepository userRepository) {
@@ -84,6 +90,53 @@ public class CommentController {
         // Update the session attribute
         session.setAttribute("commentSession", commentSession);
 
+        return "redirect:/news";
+    }
+
+    @PostMapping("/deletecomment")
+    @PreAuthorize("hasRole('USER')")
+    public String deleteComment(@RequestParam("id") long id, Model model, Authentication authentication, HttpSession session) {
+        // Get the username of the currently authenticated user
+        String currentUsername = authentication.getName();
+
+        // Retrieve the map of comments from session
+        @SuppressWarnings("unchecked")
+        Map<Long, List<Comment>> commentSession = (Map<Long, List<Comment>>) session.getAttribute("commentSession");
+        if (commentSession == null) {
+            throw new IllegalStateException("Comment session map not found in session");
+        }
+
+        // Find the comment by id
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid comment Id:" + id));
+
+        // Check if the authenticated user is the owner of the comment
+        if (!comment.getUser().getUsername().equals(currentUsername)) {
+            throw new AccessDeniedException("You are not authorized to delete this comment");
+        }
+
+        // Remove the comment from the session map
+        Long newsId = comment.getNews().getId();
+        List<Comment> newsComments = commentSession.get(newsId);
+        if (newsComments != null) {
+            newsComments.removeIf(c -> c.getId() == id);
+            if (newsComments.isEmpty()) {
+                commentSession.remove(newsId);
+            } else {
+                commentSession.put(newsId, newsComments);
+            }
+        }
+
+        // Update the session attribute
+        session.setAttribute("commentSession", commentSession);
+
+        // Delete the comment from the database
+        commentRepository.delete(comment);
+
+        // Send a message to the WebSocket clients to refresh the page
+        template.convertAndSend("/topic/commentDeleted", "comment_deleted");
+
+        // Redirect to the news page after deletion
         return "redirect:/news";
     }
 
