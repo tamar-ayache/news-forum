@@ -32,8 +32,8 @@ public class SecurityConfig {
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/login", "/signup", "/error", "/news/**", "/").permitAll()
-                                .requestMatchers("/showComment","/edit/**", "/delete/**", "/signupnews", "/addnews/**").hasRole("ADMIN")
-                                .requestMatchers("/showComment").hasRole("USER")
+                                .requestMatchers("/edit/**", "/delete/**", "/signupnews", "/addnews/**").hasRole("ADMIN")
+                                .requestMatchers("/showComment").hasAnyRole("USER", "ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
