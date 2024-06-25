@@ -7,7 +7,6 @@ import com.example.ex5.repo.NewsRepository;
 import com.example.ex5.repo.User;
 import com.example.ex5.repo.UserRepository;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.AccessDeniedException;
