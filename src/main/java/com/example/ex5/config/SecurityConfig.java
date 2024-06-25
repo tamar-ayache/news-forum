@@ -33,6 +33,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/login", "/signup", "/error", "/news/**", "/").permitAll()
                                 .requestMatchers("/edit/**", "/delete/**", "/signupnews", "/addnews/**").hasRole("ADMIN")
+                                .requestMatchers("/showComment").hasRole("USER")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->

@@ -135,7 +135,6 @@
                         </form>
                     </div>
                     <div th:if="${isAdmin != null && isAdmin}" class="card-footer d-flex justify-content-between">
-                        <a th:href="@{/edit/{id}(id=${news.id})}" class="btn btn-primary btn-action">EDIT</a>
                         <form th:action="@{/delete}" th:object="${news}" method="post">
                             <input type="hidden" name="id" th:value="${news.id}">
                             <input class="btn btn-danger" type="submit" value="DELETE"/>
