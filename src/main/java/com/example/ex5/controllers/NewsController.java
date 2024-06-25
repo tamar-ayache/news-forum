@@ -3,6 +3,7 @@ package com.example.ex5.controllers;
 import com.example.ex5.repo.News;
 import com.example.ex5.repo.NewsRepository;
 import com.example.ex5.services.NewsService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,6 +67,11 @@ public class NewsController {
         model.addAttribute("isUser", isUser);
 
         return "index";
+    }
+    @GetMapping("/showComment")
+    public String showCommentForm(News news, Model model, HttpSession session) {
+        model.addAttribute("myComments", session.getAttribute("commentSession"));
+        return "user-comment";
     }
 
     @GetMapping("/signupnews")

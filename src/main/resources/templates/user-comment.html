@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>מודעות עם תגובות</title>
+</head>
+<body>
+<h2>רשימת המודעות עם התגובות של המשתמש המחובר</h2>
+
+<ul>
+    <!-- Iterate over each news item in the session -->
+    <li th:each="news : ${myComments.keySet()}">
+        <ul>
+            <!-- Iterate over comments for this news item -->
+            <li th:each="comment : ${myComments.get(news)}">
+<!--                <p th:text="${comment.title}"></p>-->
+                <p th:text="${comment.content}"></p>
+                <p> <span th:text="${comment.user.username}"></span></p>
+                <p> <span th:text="${#temporals.format(comment.createdAt, 'dd/MM/yyyy HH:mm')}"></span></p>
+            </li>
+        </ul>
+<!--        <p th:text="${news.news.content}"></p>-->
+
+<!--        <ul>-->
+<!--            &lt;!&ndash; Iterate over comments for each news item &ndash;&gt;-->
+<!--            <li th:each="comment : ${news.comments}">-->
+<!--                <p th:text="${comment.content}"></p>-->
+<!--                <p>נכתב על ידי: <span th:text="${comment}"></span></p>-->
+<!--                <p>נכתב בתאריך: <span th:text="${#temporals.format(comment.createdAt, 'dd/MM/yyyy HH:mm')}"></span></p>-->
+<!--            </li>-->
+<!--        </ul>-->
+
+    </li>
+</ul>
+</body>
+</html>
