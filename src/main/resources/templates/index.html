@@ -61,7 +61,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
-            <a th:href="@{/showComment}" class="btn btn-outline-success">View my comment</a>
+            <a th:if="${isAdmin != null && isAdmin || isUser !=null && isUser}" th:href="@{/showComment}" class="btn btn-outline-success">View my comment</a>
             <ul class="navbar-nav me-auto mb-2 mb-md-0"></ul>
             <a th:if="${isAdmin != null && isAdmin}" href="/signupnews" class="btn btn-outline-success">Add News</a>
             <form th:action="@{/logout}" method="post" style="display:inline;">
@@ -122,6 +122,10 @@
                                     <div class="comment-body">
                                         <p th:text="${comment.content}"></p>
                                     </div>
+                                    <form th:if="${comment.user.username == username}" th:action="@{/comments/deletecomment}" th:object="${news.comments[i]}" method="post">
+                                        <input type="hidden" name="id" th:value="${comment.id}">
+                                        <input class="btn btn-danger" type="submit" value="DELETE"/>
+                                    </form>
                                 </div>
                             </div>
                             <button th:if="${#lists.size(news.comments) > 3}" class="btn btn-secondary btn-sm mt-2"
@@ -131,7 +135,7 @@
                                 Show all Comments
                             </button>
                         </div>
-                        <form th:action="@{/comments/add}" method="post">
+                        <form th:if="${isAdmin != null && isAdmin || isUser !=null && isUser}"  th:action="@{/comments/add}" method="post">
                             <input type="hidden" name="newsId" th:value="${news.id}">
                             <textarea name="content" class="form-control" rows="2"
                                       placeholder="Add a comment"></textarea>
