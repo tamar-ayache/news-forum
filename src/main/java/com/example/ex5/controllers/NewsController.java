@@ -20,6 +20,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+/**
+ * Controller for handling news-related requests.
+ */
 @Controller
 public class NewsController {
 
@@ -31,15 +34,25 @@ public class NewsController {
     @Autowired
     private SimpMessagingTemplate template;
 
-
     @Autowired
     private NewsService newsService;
 
+    /**
+     * Constructor for NewsController.
+     *
+     * @param newsService the news service to be used
+     */
     @Autowired
     public NewsController(NewsService newsService) {
         this.newsService = newsService;
     }
 
+    /**
+     * Displays the home page with a list of news articles.
+     *
+     * @param modelAndView the model and view to be used
+     * @return the model and view for the home page
+     */
     @GetMapping("/")
     public ModelAndView home(ModelAndView modelAndView) {
         List<News> newsList = repository.findAll();
@@ -48,6 +61,13 @@ public class NewsController {
         return modelAndView;
     }
 
+    /**
+     * Displays the news page with a list of news articles.
+     *
+     * @param news the news object
+     * @param model the model to be used
+     * @return the view name for the news page
+     */
     @GetMapping("/news")
     public String main(News news, Model model) {
         model.addAttribute("course", someProperty);
@@ -68,17 +88,41 @@ public class NewsController {
 
         return "index";
     }
+
+    /**
+     * Displays the comment form.
+     *
+     * @param news the news object
+     * @param model the model to be used
+     * @param session the HTTP session
+     * @return the view name for the comment form
+     */
     @GetMapping("/showComment")
     public String showCommentForm(News news, Model model, HttpSession session) {
         model.addAttribute("myComments", session.getAttribute("commentSession"));
         return "user-comment";
     }
 
+    /**
+     * Displays the sign-up form for news.
+     *
+     * @param news the news object
+     * @param model the model to be used
+     * @return the view name for the sign-up form
+     */
     @GetMapping("/signupnews")
     public String showSignUpForm(News news, Model model) {
         return "add-news";
     }
 
+    /**
+     * Adds a news article.
+     *
+     * @param news the news object to be added
+     * @param result the binding result
+     * @param model the model to be used
+     * @return redirect to the news page
+     */
     @PostMapping("/addnews")
     @PreAuthorize("hasRole('ADMIN')")
     public String addNews(@Valid News news, BindingResult result, Model model) {
@@ -91,6 +135,13 @@ public class NewsController {
         return "redirect:/news";
     }
 
+    /**
+     * Displays the update form for a news article.
+     *
+     * @param id the ID of the news article to be updated
+     * @param model the model to be used
+     * @return the view name for the update form
+     */
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public String showUpdateForm(@PathVariable("id") long id, Model model) {
@@ -99,6 +150,15 @@ public class NewsController {
         return "update-news";
     }
 
+    /**
+     * Updates a news article.
+     *
+     * @param id the ID of the news article to be updated
+     * @param news the updated news object
+     * @param result the binding result
+     * @param model the model to be used
+     * @return redirect to the news page
+     */
     @PostMapping("/update/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public String updateNews(@PathVariable("id") long id, @Valid News news, BindingResult result, Model model) {
@@ -112,6 +172,13 @@ public class NewsController {
         return "redirect:/news";
     }
 
+    /**
+     * Deletes a news article.
+     *
+     * @param id the ID of the news article to be deleted
+     * @param model the model to be used
+     * @return redirect to the news page
+     */
     @PostMapping("/delete")
     @PreAuthorize("hasRole('ADMIN')")
     public String deleteNews(@RequestParam("id") long id, Model model) {
@@ -122,14 +189,24 @@ public class NewsController {
         return "redirect:/news";
     }
 
+    /**
+     * Displays the JSON view.
+     *
+     * @param model the model to be used
+     * @return the view name for the JSON view
+     */
     @GetMapping("/json")
     public String json(Model model) {
         return "json";
     }
 
+    /**
+     * Displays the error view.
+     *
+     * @return the view name for the error view
+     */
     @GetMapping("/error")
     public String error() {
         return "error";
     }
-
 }

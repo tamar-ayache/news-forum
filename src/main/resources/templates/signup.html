@@ -64,12 +64,15 @@
 <div class="container">
   <h2>Signup</h2>
   <form action="/signup" method="post">
+    <!-- Username input -->
     <label for="username">Username:</label>
     <input type="text" id="username" name="username" required maxlength="20"><br><br>
 
+    <!-- Password input -->
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required maxlength="50"><br><br>
 
+    <!-- Role selection -->
     <label>Role:</label><br>
     <div class="role-options">
       <input type="radio" id="roleUser" name="role" value="USER" checked onclick="document.getElementById('ownerCodeSection').style.display='none'">
@@ -78,12 +81,13 @@
       <label for="roleAdmin">Admin</label>
     </div>
 
-    <!-- Owner Code input -->
+    <!-- Owner Code input for Admin role -->
     <div id="ownerCodeSection">
       <label for="ownerCode">Owner Code:</label>
       <input type="text" id="ownerCode" name="ownerCode"><br><br>
     </div>
 
+    <!-- Submit button -->
     <button type="submit">Signup</button>
   </form>
 </div>

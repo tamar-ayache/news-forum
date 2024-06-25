@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller for handling comment-related requests.
+ */
 @Controller
 @RequestMapping("/comments")
 @Validated
@@ -36,6 +39,13 @@ public class CommentController {
     @Autowired
     private SimpMessagingTemplate template;
 
+    /**
+     * Constructor for CommentController.
+     *
+     * @param commentRepository the comment repository to be used
+     * @param newsRepository the news repository to be used
+     * @param userRepository the user repository to be used
+     */
     @Autowired
     public CommentController(CommentRepository commentRepository, NewsRepository newsRepository, UserRepository userRepository) {
         this.commentRepository = commentRepository;
@@ -43,6 +53,16 @@ public class CommentController {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Adds a comment to a news article.
+     *
+     * @param newsId the ID of the news article
+     * @param content the content of the comment
+     * @param currentUser the currently authenticated user
+     * @param model the model to be used
+     * @param session the HTTP session
+     * @return redirect to the news page
+     */
     @PostMapping("/add")
     public String addComment(@RequestParam Long newsId, @RequestParam String content,
                              @AuthenticationPrincipal UserDetails currentUser,
@@ -92,6 +112,15 @@ public class CommentController {
         return "redirect:/news";
     }
 
+    /**
+     * Deletes a comment.
+     *
+     * @param id the ID of the comment to be deleted
+     * @param model the model to be used
+     * @param authentication the current authentication
+     * @param session the HTTP session
+     * @return redirect to the news page
+     */
     @PostMapping("/deletecomment")
     @PreAuthorize("hasRole('USER')")
     public String deleteComment(@RequestParam("id") long id, Model model, Authentication authentication, HttpSession session) {
@@ -139,7 +168,15 @@ public class CommentController {
         return "redirect:/news";
     }
 
-
+    /**
+     * Edits a comment.
+     *
+     * @param commentId the ID of the comment to be edited
+     * @param content the new content of the comment
+     * @param currentUser the currently authenticated user
+     * @param model the model to be used
+     * @return redirect to the news page
+     */
     @PostMapping("/edit")
     public String editComment(@RequestParam Long commentId, @RequestParam String content, @AuthenticationPrincipal UserDetails currentUser, Model model) {
         Comment comment = commentRepository.findById(commentId).orElse(null);

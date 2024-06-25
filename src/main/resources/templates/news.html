@@ -9,6 +9,7 @@
     <script>
         var stompClient = null;
 
+        // Function to establish WebSocket connection
         function connect() {
             var socket = new SockJS('/ws');
             stompClient = Stomp.over(socket);
@@ -20,6 +21,7 @@
             });
         }
 
+        // Function to handle news updates received via WebSocket
         function handleNewsUpdate(item) {
             var newsList = document.getElementById("news-list");
             for (var i = 0; i < newsList.children.length; i++) {
@@ -30,6 +32,7 @@
             }
         }
 
+        // Connect to WebSocket when the page loads
         window.onload = connect;
     </script>
 </head>
@@ -38,13 +41,16 @@
 
 <h2>News Items</h2>
 <ul id="news-list">
+    <!-- Loop through news items and display them -->
     <th:block th:each="item : ${newsItems}">
         <li>
             <span th:text="${item}"></span>
+            <!-- Form to add news item to favorites -->
             <form action="/addFavorite" method="post" style="display:inline;">
                 <input type="hidden" name="item" th:value="${item}">
                 <button type="submit">Add to Favorites</button>
             </form>
+            <!-- Form to delete news item -->
             <form action="/delete" method="post" style="display:inline;">
                 <input type="hidden" name="item" th:value="${item}">
                 <button type="submit">Delete</button>
@@ -55,6 +61,7 @@
 
 <h2>Favorite Items</h2>
 <ul>
+    <!-- Loop through favorite items and display them -->
     <th:block th:each="item : ${favorites}">
         <li th:text="${item}"></li>
     </th:block>
