@@ -63,7 +63,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <a th:if="${isAdmin != null && isAdmin || isUser !=null && isUser}" th:href="@{/showComment}" class="btn btn-outline-success">View my comment</a>
             <ul class="navbar-nav me-auto mb-2 mb-md-0"></ul>
-            <a th:if="${isAdmin != null && isAdmin}" href="/signupnews" class="btn btn-outline-success">Add News</a>
+            <a th:if="${isAdmin != null && isAdmin}" href="/addnews" class="btn btn-outline-success">Add News</a>
             <form th:action="@{/logout}" method="post" style="display:inline;">
                 <button th:if="${isAdmin != null && isAdmin || isUser !=null && isUser}" class="btn btn-outline-success"
                         type="submit">Logout
@@ -152,7 +152,7 @@
             </div>
         </div>
         <div th:if="${isAdmin != null && isAdmin}" class="col-md-12 text-center my-5">
-            <a href="/signupnews" class="btn btn-primary">Add News</a>
+            <a href="/addnews" class="btn btn-primary">Add News</a>
         </div>
     </div>
 </div>

@@ -110,7 +110,7 @@ public class NewsController {
      * @param model the model to be used
      * @return the view name for the sign-up form
      */
-    @GetMapping("/signupnews")
+    @GetMapping("/addnews")
     public String showSignUpForm(News news, Model model) {
         return "add-news";
     }
@@ -135,42 +135,42 @@ public class NewsController {
         return "redirect:/news";
     }
 
-    /**
-     * Displays the update form for a news article.
-     *
-     * @param id the ID of the news article to be updated
-     * @param model the model to be used
-     * @return the view name for the update form
-     */
-    @GetMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String showUpdateForm(@PathVariable("id") long id, Model model) {
-        News news = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid news Id:" + id));
-        model.addAttribute("news", news);
-        return "update-news";
-    }
-
-    /**
-     * Updates a news article.
-     *
-     * @param id the ID of the news article to be updated
-     * @param news the updated news object
-     * @param result the binding result
-     * @param model the model to be used
-     * @return redirect to the news page
-     */
-    @PostMapping("/update/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String updateNews(@PathVariable("id") long id, @Valid News news, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            news.setId(id);
-            return "update-news";
-        }
-        // Send a message to the WebSocket clients to refresh the page
-        template.convertAndSend("/topic/newsDeleted", "news_deleted");
-        repository.save(news);
-        return "redirect:/news";
-    }
+//    /**
+//     * Displays the update form for a news article.
+//     *
+//     * @param id the ID of the news article to be updated
+//     * @param model the model to be used
+//     * @return the view name for the update form
+//     */
+//    @GetMapping("/edit/{id}")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public String showUpdateForm(@PathVariable("id") long id, Model model) {
+//        News news = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid news Id:" + id));
+//        model.addAttribute("news", news);
+//        return "update-news";
+//    }
+//
+//    /**
+//     * Updates a news article.
+//     *
+//     * @param id the ID of the news article to be updated
+//     * @param news the updated news object
+//     * @param result the binding result
+//     * @param model the model to be used
+//     * @return redirect to the news page
+//     */
+//    @PostMapping("/update/{id}")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public String updateNews(@PathVariable("id") long id, @Valid News news, BindingResult result, Model model) {
+//        if (result.hasErrors()) {
+//            news.setId(id);
+//            return "update-news";
+//        }
+//        // Send a message to the WebSocket clients to refresh the page
+//        template.convertAndSend("/topic/newsDeleted", "news_deleted");
+//        repository.save(news);
+//        return "redirect:/news";
+//    }
 
     /**
      * Deletes a news article.
