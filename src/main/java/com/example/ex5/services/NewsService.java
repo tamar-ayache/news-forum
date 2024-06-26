@@ -26,4 +26,7 @@ public class NewsService {
         List<News> Newsp = newsRepository.findByTitle(title);
         return Newsp;
     }
+    public void save(News news) {
+        newsRepository.save(news);
+    }
 }

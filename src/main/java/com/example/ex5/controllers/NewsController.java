@@ -129,10 +129,8 @@ public class NewsController {
         if (result.hasErrors()) {
             return "add-news";
         }
-        // Send a message to the WebSocket clients to refresh the page
-        template.convertAndSend("/topic/newsDeleted", "news_deleted");
-        repository.save(news);
-        return "redirect:/news";
+        newsService.save(news); // שמירת ההודעה באמצעות השירות
+        return "redirect:/news"; // ניתוב מחדש לדף החדשות
     }
 
 //    /**
