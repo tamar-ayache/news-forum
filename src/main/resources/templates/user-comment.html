@@ -69,6 +69,8 @@
             <ul class="navbar-nav me-auto mb-2 mb-md-0"></ul>
             <a th:if="${isAdmin != null && isAdmin}" href="/signupnews" class="btn btn-outline-success">Add News</a>
             <form th:action="@{/logout}" method="post" style="display:inline;">
+                <a href="/news" class="btn btn-outline-secondary">News</a>
+
                 <button  class="btn btn-outline-success"
                          type="submit">Logout
                 </button>
@@ -80,9 +82,7 @@
 <div class="container">
     <h2>Comment list</h2>
 
-    <div th:if="${#lists.isEmpty(myComments) }">
-
-    </div>
+    <div th:if="${#lists.isEmpty(myComments) }"></div>
     <ul th:if="${!#lists.isEmpty(myComments)}">
         <li th:each="news : ${myComments.keySet()}">
             <ul>
@@ -91,7 +91,6 @@
                     <p>TITLE : <span th:text="${comment.news.title}"></span></p>
                     <p>CONTENT : <span th:text="${comment.content}"></span></p>
                     <p>user : <span th:text="${comment.user.username}"></span></p>
-                    <p>TITLE : <span th:text="${comment.news.title}"></span></p>
                     <p>DATE : <span th:text="${#temporals.format(comment.createdAt, 'dd/MM/yyyy HH:mm')}"></span></p>
                 </li>
             </ul>
