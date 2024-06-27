@@ -126,37 +126,32 @@ public class CommentController {
     public String deleteComment(@RequestParam("id") long id, Model model, Authentication authentication, HttpSession session) {
         // Get the username of the currently authenticated user
         String currentUsername = authentication.getName();
-
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid comment Id:" + id));
         // Retrieve the map of comments from session
         @SuppressWarnings("unchecked")
         Map<Long, List<Comment>> commentSession = (Map<Long, List<Comment>>) session.getAttribute("commentSession");
-        if (commentSession == null) {
-            throw new IllegalStateException("Comment session map not found in session");
-        }
-
-        // Find the comment by id
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid comment Id:" + id));
-
-        // Check if the authenticated user is the owner of the comment
-        if (!comment.getUser().getUsername().equals(currentUsername)) {
-            throw new AccessDeniedException("You are not authorized to delete this comment");
-        }
-
-        // Remove the comment from the session map
-        Long newsId = comment.getNews().getId();
-        List<Comment> newsComments = commentSession.get(newsId);
-        if (newsComments != null) {
-            newsComments.removeIf(c -> c.getId() == id);
-            if (newsComments.isEmpty()) {
-                commentSession.remove(newsId);
-            } else {
-                commentSession.put(newsId, newsComments);
+        if (commentSession != null) {
+            // Check if the authenticated user is the owner of the comment
+            if (!comment.getUser().getUsername().equals(currentUsername)) {
+                throw new AccessDeniedException("You are not authorized to delete this comment");
             }
-        }
 
-        // Update the session attribute
-        session.setAttribute("commentSession", commentSession);
+            // Remove the comment from the session map
+            Long newsId = comment.getNews().getId();
+            List<Comment> newsComments = commentSession.get(newsId);
+            if (newsComments != null) {
+                newsComments.removeIf(c -> c.getId() == id);
+                if (newsComments.isEmpty()) {
+                    commentSession.remove(newsId);
+                } else {
+                    commentSession.put(newsId, newsComments);
+                }
+            }
+
+            // Update the session attribute
+            session.setAttribute("commentSession", commentSession);
+        }
 
         // Delete the comment from the database
         commentRepository.delete(comment);
