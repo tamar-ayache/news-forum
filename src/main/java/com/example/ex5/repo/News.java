@@ -1,6 +1,8 @@
 package com.example.ex5.repo;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,10 +16,12 @@ public class News implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Size(max = 100)
+    @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(nullable = false)
+    @Size(max = 255)
+    @Column(nullable = false, length = 255)
     private String content;
 
     @OneToMany(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true)
