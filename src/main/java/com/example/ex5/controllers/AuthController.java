@@ -6,20 +6,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-/**
- * Controller for handling authentication-related requests.
- */
+
 @Controller
 @SessionAttributes("role")
 public class AuthController {
-    /**
-     * Constructor for AuthController.
-     *
-     * @param userDetailsService the user details service to be used
-     */
     private final CustomUserDetailsService userDetailsService;
 
     @Autowired
+    /**
+     * Constructor for AuthController
+     * @param userDetailsService the user details service to be used
+     */
     public AuthController(CustomUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
