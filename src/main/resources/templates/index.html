@@ -62,7 +62,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <a th:if="${isAdmin != null && isAdmin || isUser !=null && isUser}" th:href="@{/showComment}" class="btn btn-outline-success">View my comment</a>
-            <span class="navbar-text">Hello, <span th:text="${!isAdmin && !isUser ? 'host':username}"></span></span>
+            <span class="navbar-text">Hello <span th:text="${!isAdmin && !isUser ? 'host':username}"></span></span>
             <ul class="navbar-nav me-auto mb-2 mb-md-0"></ul>
             <a th:if="${isAdmin != null && isAdmin}" href="/addnews" class="btn btn-outline-success">Add News</a>
             <form th:action="@{/logout}" method="post" style="display:inline;">
